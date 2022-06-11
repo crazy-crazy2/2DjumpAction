@@ -5,7 +5,7 @@
 #define PI 3.141592654f
 
 
-//画面サイズ設定
+//画面サイズ
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
