@@ -20,24 +20,24 @@ int chip[NUM_CHIP_ALL];
 const int NUM_MAP_X = 25;
 const int NUM_MAP_Y = 18;
 int data[] = {
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
 
-	10, 0, 0, 0, 0,  0, 0, 11, 11, 11,  11, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 11, 11, 11, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 11, 11, 11,  11, 11, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,  0, 11, 11, 11, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,11,0,0,0,
 
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 12, 13,13,13,13,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 13, 13, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	10, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,11,11,11,0,0,
+	0, 13, 13, 13, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 11,11,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
 	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
 	11, 11, 11, 11, 11,  11, 11, 11, 11, 11,  11, 11, 11, 11, 11,  11, 11, 11, 11, 11, 11,11,11,11,11,
 };
@@ -70,8 +70,9 @@ const int enemy_height = 32;
 
 float x = (SCREEN_WIDTH - chara_width) / 2;
 float y = (SCREEN_HEIGHT - chara_height) / 2;
-float yadd = 0.0f; //重力加速度の変数
+float yadd = 0.0f; //y方向の速度vy
 float gravity = 0.2f;
+float initVy = -6.0f; //y方向の初速度
 //前回の位置
 float old_x = 0.0f;
 float old_y = 0.0f;
@@ -220,12 +221,7 @@ void Chara_Move() {
 		act_dir = 1;
 	}
 
-	//ジャンプ処理
-	
-	if (input & PAD_INPUT_A) {
-		yadd = -3.0f;
-	}
-	
+
 
 	
 
@@ -283,11 +279,26 @@ void Chara_Move() {
 	//暗黒弾が画面外に出たら
 	if (shotBrack_x > 800 || shotBrack_x < 0) isShot2= false;
 
-
-	y += yadd;
-	yadd += gravity;
-
-	yadd = std::min(30.0f, std::max(-30.0f, yadd));
+	//ジャンプ処理
+	if (!jFlag) { 
+		if (input & PAD_INPUT_A) {
+			yadd = initVy;
+			jFlag = true;
+		}
+		y += yadd;
+		yadd += gravity;
+		yadd = std::min(30.0f, std::max(-30.0f, yadd));
+	}
+	if (jFlag) {
+		y += yadd;
+		yadd += gravity;
+		yadd = std::min(30.0f, std::max(-30.0f, yadd));
+		if (y > (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7) {
+			y = (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7;
+			jFlag = false;
+		}
+	}
+	//if (y > (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7) jFlag = false;
 }
 
 //キャラクタアニメーション更新
@@ -406,104 +417,106 @@ void Bat_Move() {
 	}
 	//コウモリ２の１の挙動
 	if (live[0]) {
-		if (isBind) return;
-		if (x_bat2[0] == 100.0f && y_bat2[0] == 200.0f) { //左上(初期位置)にいるとき
-			isBottom1 = FALSE;
-			isTop1 = TRUE;
-			isLeft1 = TRUE;
-			isRight1 = FALSE;
-		}
+		if (!isBind) {
+			if (x_bat2[0] == 100.0f && y_bat2[0] == 200.0f) { //左上(初期位置)にいるとき
+				isBottom1 = FALSE;
+				isTop1 = TRUE;
+				isLeft1 = TRUE;
+				isRight1 = FALSE;
+			}
 
-		if (isBottom1 == FALSE && isTop1 == TRUE && isLeft1 == TRUE && isRight1 == FALSE) { //左上から下へ降りている
-			x_bat2[0] += 0.5f;
-			y_bat2[0] += 1.5f;
-		}
-		if (y_bat2[0] == 500) { //一番下に行ったとき
-			if (isLeft1) {
-				isBottom1 = TRUE;
-				isTop1 = FALSE;
-				isLeft1 = FALSE;
-				isRight1 = FALSE;
-				migikara1 = FALSE;
-				hidarikara1 = TRUE;
+			if (isBottom1 == FALSE && isTop1 == TRUE && isLeft1 == TRUE && isRight1 == FALSE) { //左上から下へ降りている
+				x_bat2[0] += 0.5f;
+				y_bat2[0] += 1.5f;
 			}
-			if (isRight1) {
-				isBottom1 = TRUE;
-				isTop1 = FALSE;
-				isLeft1 = FALSE;
-				isRight1 = FALSE;
-				migikara1 = TRUE;
-				hidarikara1 = FALSE;
+			if (y_bat2[0] == 500) { //一番下に行ったとき
+				if (isLeft1) {
+					isBottom1 = TRUE;
+					isTop1 = FALSE;
+					isLeft1 = FALSE;
+					isRight1 = FALSE;
+					migikara1 = FALSE;
+					hidarikara1 = TRUE;
+				}
+				if (isRight1) {
+					isBottom1 = TRUE;
+					isTop1 = FALSE;
+					isLeft1 = FALSE;
+					isRight1 = FALSE;
+					migikara1 = TRUE;
+					hidarikara1 = FALSE;
+				}
 			}
-		}
-		if (isBottom1 == TRUE && isTop1 == FALSE && migikara1 == FALSE && hidarikara1 == TRUE) { //左から降りてきたとき
-			x_bat2[0] += 0.5f;
-			y_bat2[0] -= 1.5f;
-		}
-		if (isBottom1 == TRUE && isTop1 == FALSE && migikara1 == TRUE && hidarikara1 == FALSE) { //右から降りてきたとき
-			x_bat2[0] -= 0.5f;
-			y_bat2[0] -= 1.5f;
-		}
-		if (x_bat2[0] != 100.0f && y_bat2[0] == 200.0f) { //右上にいるとき
-			isRight1 = TRUE;
-			isLeft1 = FALSE;
-			isBottom1 = FALSE;
-			isTop1 = TRUE;
-		}
-		if (isRight1 == TRUE && isLeft1 == FALSE) { //右上から下に向かう
-			x_bat2[0] -= 0.5f;
-			y_bat2[0] += 1.5f;
+			if (isBottom1 == TRUE && isTop1 == FALSE && migikara1 == FALSE && hidarikara1 == TRUE) { //左から降りてきたとき
+				x_bat2[0] += 0.5f;
+				y_bat2[0] -= 1.5f;
+			}
+			if (isBottom1 == TRUE && isTop1 == FALSE && migikara1 == TRUE && hidarikara1 == FALSE) { //右から降りてきたとき
+				x_bat2[0] -= 0.5f;
+				y_bat2[0] -= 1.5f;
+			}
+			if (x_bat2[0] != 100.0f && y_bat2[0] == 200.0f) { //右上にいるとき
+				isRight1 = TRUE;
+				isLeft1 = FALSE;
+				isBottom1 = FALSE;
+				isTop1 = TRUE;
+			}
+			if (isRight1 == TRUE && isLeft1 == FALSE) { //右上から下に向かう
+				x_bat2[0] -= 0.5f;
+				y_bat2[0] += 1.5f;
+			}
 		}
 	}
 	//コウモリ２の２の挙動
 	if (live[1]) {
-		if (isBind2) return;
-		if (x_bat2[1] == 500.0f && y_bat2[1] == 200.0f) { //左上(初期位置)にいるとき
-			isBottom2 = FALSE;
-			isTop2 = TRUE;
-			isLeft2 = TRUE;
-			isRight2 = FALSE;
-		}
+		if (!isBind2) {
+			if (x_bat2[1] == 500.0f && y_bat2[1] == 200.0f) { //左上(初期位置)にいるとき
+				isBottom2 = FALSE;
+				isTop2 = TRUE;
+				isLeft2 = TRUE;
+				isRight2 = FALSE;
+			}
 
-		if (isBottom2 == FALSE && isTop2 == TRUE && isLeft2 == TRUE && isRight2 == FALSE) { //左上から下へ降りている
-			x_bat2[1] += 0.5f;
-			y_bat2[1] += 1.5f;
-		}
-		if (y_bat2[1] == 500) { //一番下に行ったとき
-			if (isLeft2) {
-				isBottom2 = TRUE;
-				isTop2 = FALSE;
-				isLeft2 = FALSE;
-				isRight2 = FALSE;
-				migikara2 = FALSE;
-				hidarikara2 = TRUE;
+			if (isBottom2 == FALSE && isTop2 == TRUE && isLeft2 == TRUE && isRight2 == FALSE) { //左上から下へ降りている
+				x_bat2[1] += 0.5f;
+				y_bat2[1] += 1.5f;
 			}
-			if (isRight2) {
-				isBottom2 = TRUE;
-				isTop2 = FALSE;
-				isLeft2 = FALSE;
-				isRight2 = FALSE;
-				migikara2 = TRUE;
-				hidarikara2 = FALSE;
+			if (y_bat2[1] == 500) { //一番下に行ったとき
+				if (isLeft2) {
+					isBottom2 = TRUE;
+					isTop2 = FALSE;
+					isLeft2 = FALSE;
+					isRight2 = FALSE;
+					migikara2 = FALSE;
+					hidarikara2 = TRUE;
+				}
+				if (isRight2) {
+					isBottom2 = TRUE;
+					isTop2 = FALSE;
+					isLeft2 = FALSE;
+					isRight2 = FALSE;
+					migikara2 = TRUE;
+					hidarikara2 = FALSE;
+				}
 			}
-		}
-		if (isBottom2 == TRUE && isTop2 == FALSE && migikara2 == FALSE && hidarikara2 == TRUE) { //左から降りてきたとき
-			x_bat2[1] += 0.5f;
-			y_bat2[1] -= 1.5f;
-		}
-		if (isBottom2 == TRUE && isTop2 == FALSE && migikara2 == TRUE && hidarikara2 == FALSE) { //右から降りてきたとき
-			x_bat2[1] -= 0.5f;
-			y_bat2[1] -= 1.5f;
-		}
-		if (x_bat2[1] != 500.0f && y_bat2[1] == 200.0f) { //右上にいるとき
-			isRight2 = TRUE;
-			isLeft2 = FALSE;
-			isBottom2 = FALSE;
-			isTop2 = TRUE;
-		}
-		if (isRight2 == TRUE && isLeft2 == FALSE) { //右上から下に向かう
-			x_bat2[1] -= 0.5f;
-			y_bat2[1] += 1.5f;
+			if (isBottom2 == TRUE && isTop2 == FALSE && migikara2 == FALSE && hidarikara2 == TRUE) { //左から降りてきたとき
+				x_bat2[1] += 0.5f;
+				y_bat2[1] -= 1.5f;
+			}
+			if (isBottom2 == TRUE && isTop2 == FALSE && migikara2 == TRUE && hidarikara2 == FALSE) { //右から降りてきたとき
+				x_bat2[1] -= 0.5f;
+				y_bat2[1] -= 1.5f;
+			}
+			if (x_bat2[1] != 500.0f && y_bat2[1] == 200.0f) { //右上にいるとき
+				isRight2 = TRUE;
+				isLeft2 = FALSE;
+				isBottom2 = FALSE;
+				isTop2 = TRUE;
+			}
+			if (isRight2 == TRUE && isLeft2 == FALSE) { //右上から下に向かう
+				x_bat2[1] -= 0.5f;
+				y_bat2[1] += 1.5f;
+			}
 		}
 	}
 }
@@ -640,6 +653,28 @@ void CheckHitEnemy() {
 			}
 		}
 	}
+	//暗黒弾で止まった場合コウモリ２－１
+	if (isBind) {
+		if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
+			if (y >= old_y) {
+				if (old_y <= y_bat2[0]) {
+					yadd = 0.0f;
+					jFlag = false;
+				}
+			}
+		}
+	}
+	//暗黒弾で止まった場合コウモリ２－２
+	if (isBind2) {
+		if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
+			if (y >= old_y) {
+				if (old_y <= y_bat2[1]) {
+					yadd = 0.0f;
+					jFlag = false;
+				}
+			}
+		}
+	}
 }
 
 void CheckHitItem() {
@@ -660,7 +695,7 @@ void Map_HitCheck() {
 						if (j * SIZE_MAP_Y - chara_height >= old_y) {
 							old_y = j * SIZE_MAP_Y - chara_height;
 							y = old_y;
-							//yadd = 0.0f; /////ここ要らなかった！！！/////
+							jFlag = false;
 						}
 						else {
 							int _x = std::max(x, old_x);
