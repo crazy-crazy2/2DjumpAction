@@ -77,6 +77,9 @@ float initVy = -6.0f; //y方向の初速度
 float old_x = 0.0f;
 float old_y = 0.0f;
 
+bool damaged = FALSE; //ダメージを受けているか
+int damageCounter = 0; //ダメージカウンター
+
 //攻撃
 int shot_x = 0; //弾が出る位置
 int shot_y = 0;
@@ -148,16 +151,6 @@ int bat_dir = 0;
 
 bool enemy2Live = FALSE;
 
-//typedef struct{
-//	float x, y;
-//	int bat_act[12];
-//	int bat_motion[4] = {0,1,2,1};
-//	int bat_index = 0;
-//	int bat_wait = 1;
-//	int bat_dir = 0;
-//	bool live = FALSE;
-//}Bat;
-
 //コウモリ2体
 float x_bat2[2] = { 100.0f,500.0f };
 float y_bat2[2] = { 200.0f,200.0f };
@@ -220,10 +213,6 @@ void Chara_Move() {
 		x--;
 		act_dir = 1;
 	}
-
-
-
-	
 
 	//弾が出ていないとき
 	if (isShot == false) {
@@ -298,7 +287,7 @@ void Chara_Move() {
 			jFlag = false;
 		}
 	}
-	//if (y > (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7) jFlag = false;
+	
 }
 
 //キャラクタアニメーション更新
@@ -313,6 +302,10 @@ void Chara_Ani() {
 
 //キャラクタ更新
 void Chara_Update() {
+	if (damaged) {
+		y += 3.0;
+		return;
+	}
 	Chara_Move();
 	Chara_Ani();
 }
@@ -664,6 +657,24 @@ void CheckHitEnemy() {
 			}
 		}
 	}
+	else {//暗黒弾で止まっていない場合コウモリ２－１
+		if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height) && count == 0) {
+			damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
+			count = 10;
+		}
+		if (count > 0) {
+			--count;
+			if (count <= 0) {
+				count = 0;
+			}
+		}
+		if (damageCounter > 0) {
+			--damageCounter;
+			if (damageCounter <= 0) {
+				damageCounter = 0;
+			}
+		}
+	}
 	//暗黒弾で止まった場合コウモリ２－２
 	if (isBind2) {
 		if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
@@ -675,12 +686,39 @@ void CheckHitEnemy() {
 			}
 		}
 	}
+	else {//暗黒弾で止まっていない場合コウモリ２－２
+		if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height) && count == 0) {
+			damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
+			count = 10;
+		}
+		if (count > 0) {
+			--count;
+			if (count <= 0) {
+				count = 0;
+			}
+		}
+		if (damageCounter > 0) {
+			--damageCounter;
+			if (damageCounter <= 0) {
+				damageCounter = 0;
+			}
+		}
+	}
 }
 
 void CheckHitItem() {
 	if (CheckHit(x, y, chara_width, chara_height, x_item, y_item, item_w, item_h)) {
 		canShotBrackball = true;
 			itemGet = TRUE;
+	}
+}
+
+void CheckDamage() {
+	if (damageCounter > 0) {
+		damaged = TRUE;
+	}
+	else {
+		damaged = FALSE;
 	}
 }
 
@@ -738,13 +776,25 @@ void AttackHit() {
 		Item_Drop(x_bat,y_bat); //アイテムドロップ
 		if (live[0] == FALSE && live[1] == FALSE) { live[0] = TRUE; live[1] = TRUE; } //第3ウェーブへ
 	}
-	//コウモリ２の１に攻撃
-	if (CheckHit(shotBrack_x, shotBrack_y, 20, 20, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
-		isBind = TRUE;
+	//コウモリ２の１に攻撃(通常弾)
+	if (CheckHit(shot_x, shot_y, 20, 20, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
+		if (isBind) {
+			isBind = FALSE;
+		} //停止解除or効果なし
 	}
-	//コウモリ２の２に攻撃
+	//コウモリ２の１に攻撃(暗黒弾)
+	if (CheckHit(shotBrack_x, shotBrack_y, 20, 20, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
+		isBind = TRUE; //停止
+	}
+	//コウモリ２の２に攻撃(通常弾)
+	if (CheckHit(shot_x, shot_y, 20, 20, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
+		if (isBind2) {
+			isBind2 = FALSE;
+		} //停止解除or効果なし
+	}
+	//コウモリ２の２に攻撃(暗黒弾)
 	if (CheckHit(shotBrack_x, shotBrack_y, 20, 20, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
-		isBind2 = TRUE;
+		isBind2 = TRUE; //停止
 	}
 }
 
@@ -810,6 +860,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 
 		//敵ゴーストとの当たり判定
 		CheckHitEnemy();
+
+		//ダメージを受けているか
+		CheckDamage();
 
 		//アイテムとの当たり判定
 		CheckHitItem();
