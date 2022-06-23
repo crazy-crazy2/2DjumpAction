@@ -88,6 +88,7 @@ int shotBrack_y = 0;
 bool isShot = false;
 bool isShot2 = false; //動きを止める弾(暗黒弾)
 bool canShotBrackball = false; //動きを止める弾(暗黒弾)が撃てるかどうか
+int canBrackBallFlag = 0; //intの暗黒弾が撃てるかのフラグ
 
 bool jFlag = FALSE; //ジャンプフラグ
 
@@ -193,6 +194,13 @@ void Bat2_Init() {
 
 void Item_Init() {
 	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item_handle);
+}
+
+int fontHandle;
+
+//フォントデータ作成
+void CreateFontData() {
+	fontHandle = CreateFontToHandle("MSゴシック", 50, 9, DX_FONTTYPE_NORMAL);
 }
 
 float speed = 3.0f;
@@ -594,6 +602,26 @@ void Item_Draw() {
 	}
 }
 
+//操作方法描画
+void SosaHoho_Draw() {
+	DrawFormatString(100, 580, GetColor(255, 255, 255), "←→キー：左右移動");
+	DrawFormatString(300, 580, GetColor(255, 255, 255), "Zキー：ジャンプ");
+	DrawFormatString(450, 580, GetColor(255, 255, 255), "Xキー：通常弾");
+	if (canShotBrackball) {
+		DrawFormatString(600, 580, GetColor(255, 255, 255), "Cキー：暗黒弾");
+	}
+}
+
+
+
+//どのアビリティ(通常弾や暗黒弾など)が使えるかどうかを表示する
+void Abirity_Draw() {
+	DrawBox(0, 0, 200, 150, GetColor(125, 125, 125), TRUE);//バックの長方形
+	DrawRotaGraph(32, 32, 1.0, 0.0, item_handle[7], TRUE); //クリスタル(暗黒弾を撃てるアイテム)のアイコン
+	DrawFormatString(64, 30, GetColor(0, 0, 0), "：%d", canBrackBallFlag);
+	if (canBrackBallFlag == 1) DrawFormatString(30, 47, GetColor(0, 0, 0), "(「暗黒弾」発射可能)");
+}
+
 int CheckHit(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
 	int L1 = x1;
 	int R1 = x1 + w1;
@@ -709,7 +737,8 @@ void CheckHitEnemy() {
 void CheckHitItem() {
 	if (CheckHit(x, y, chara_width, chara_height, x_item, y_item, item_w, item_h)) {
 		canShotBrackball = true;
-			itemGet = TRUE;
+		itemGet = TRUE;
+		canBrackBallFlag = 1;
 	}
 }
 
@@ -828,7 +857,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	//マップ初期化
 	Map_Init();
 
-
+	//フォント作成
+	CreateFontData();
 
 
 
@@ -876,8 +906,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 		//キャラクタ描画
 		Chara_Draw();
 
+		//操作方法描画
+		SosaHoho_Draw();
 		
-		
+		//アビリティ描画
+		Abirity_Draw();
+
 		ScreenFlip();
 	}
 
