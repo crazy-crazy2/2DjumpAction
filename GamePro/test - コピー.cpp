@@ -20,26 +20,26 @@ int chip[NUM_CHIP_ALL];
 const int NUM_MAP_X = 25;
 const int NUM_MAP_Y = 18;
 int data[] = {
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
 
-	0, 0, 0, 0, 0,  0, 0, 11, 11, 11,  11, 11, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,  0, 11, 11, 11, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,11,0,0,0,
+	19, 0, 0, 0, 0,  0, 0, 11, 11, 11,  11, 11, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,  0, 11, 11, 11, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 11, 11,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,11,0,0,19,
 
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,11,11,11,0,0,
-	0, 13, 13, 13, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 11,11,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,0,
-	11, 11, 11, 11, 11,  11, 11, 11, 11, 11,  11, 11, 11, 11, 11,  11, 11, 11, 11, 11, 11,11,11,11,11,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 11, 0, 0,  0, 0, 0, 0, 0,11,11,11,0,19,
+	19, 13, 13, 13, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 11,11,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	10, 10, 10, 10, 10,  10, 10, 10, 10, 10,  10, 10, 10, 10, 10,  10, 10, 10, 10, 10, 10,10,10,10,10,
 };
 
 //マップの初期化
@@ -62,7 +62,7 @@ void Map_Draw() {
 //キャラクタ定義
 const int chara_width = 32;
 const int chara_height = 32;
-int hp = 10; //HP
+
 
 
 const int enemy_width = 32; //敵キャラの幅、高さ
@@ -85,10 +85,14 @@ int shot_x = 0; //弾が出る位置
 int shot_y = 0;
 int shotBrack_x = 0; //暗黒弾が出る位置
 int shotBrack_y = 0;
+int shotBullet_x = 0; //鉛弾が出る位置
+int shotBullet_y = 0;
 bool isShot = false;
 bool isShot2 = false; //動きを止める弾(暗黒弾)
+bool isShot3 = false; //
 bool canShotBrackball = false; //動きを止める弾(暗黒弾)が撃てるかどうか
 int canBrackBallFlag = 0; //intの暗黒弾が撃てるかのフラグ
+int canShotBulletFlag = 0;
 
 bool jFlag = FALSE; //ジャンプフラグ
 
@@ -163,7 +167,7 @@ int bat2_wait = 1;
 int bat2_dir = 0;
 bool live[2] = { FALSE,FALSE };
 
-//アイテム
+//アイテム(クリスタル)
 float x_item;
 float y_item;
 int item_w = 32;
@@ -171,6 +175,14 @@ int item_h = 32;
 bool isDrop = FALSE;
 int item_handle[12];
 bool itemGet = FALSE;
+
+//アイテム２(オーブ)
+float x_item2 = 90;
+float y_item2 = 370;
+int item2_w = 32;
+int item2_h = 32;
+int item2_handle[12];
+bool item2Get = FALSE;
 
 
 //キャラクタ初期化
@@ -191,9 +203,10 @@ void Bat2_Init() {
 	LoadDivGraph("koumori.png", ENE_NUM_ALL, ENE_NUM_X, ENE_NUM_Y, enemy_width, enemy_height, bat1_act);
 	LoadDivGraph("koumori.png", ENE_NUM_ALL, ENE_NUM_X, ENE_NUM_Y, enemy_width, enemy_height, bat2_act);
 }
-
+//アイテム初期化
 void Item_Init() {
 	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item_handle);
+	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item2_handle);
 }
 
 int fontHandle;
@@ -204,6 +217,9 @@ void CreateFontData() {
 }
 
 float speed = 3.0f;
+int direct = 3; //0:上　1:左　2:右　3:なし
+int direct_Brack = 3;
+int direct_Bullet = 3;
 
 //キャラクタ移動
 void Chara_Move() {
@@ -220,6 +236,10 @@ void Chara_Move() {
 	if (input & PAD_INPUT_LEFT) { //左を向く
 		x--;
 		act_dir = 1;
+	}
+	//上を向く(正面を向く)
+	if (input & PAD_INPUT_UP) {
+		act_dir = 0;
 	}
 
 	//弾が出ていないとき
@@ -243,38 +263,98 @@ void Chara_Move() {
 			isShot2= true;
 		}
 	}
+	
+	//弾が出ていないとき３
+	if (canShotBulletFlag == 1) {
+		if (isShot3 == false) {
 
+			//弾を表示
+			if (input & PAD_INPUT_X) {
+				shotBullet_x = x + 16;
+				shotBullet_y = y + 16;
+				isShot3 = true;
+			}
+		}
+	}
 	//通常弾
-	if (isShot) {
+	if (isShot && direct == 3) {
 		if (act_dir == 2) { //右を向いていたら
-			shot_x += 8;
-			DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
+			direct = 2; //弾向きを固定
 		}
 		if (act_dir == 1) { //左を向いていたら
-			shot_x -= 8;
-			DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
-
+			direct = 1;
 		}
+	}
+	//弾の向き(directの値)によって行先が変わる
+	if (direct == 2) {
+		shot_x += 8;
+		DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
+	}
+	if (direct == 1) {
+		shot_x -= 8;
+		DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
 	}
 
 	//弾が画面外に出たら
-	if (shot_x > 800 || shot_x < 0) isShot = false;
-
+	if (shot_x > 800 || shot_x < 0) {
+		isShot = false;
+		direct = 3; //弾向きを初期化
+	}
 	//動きを止める弾(暗黒弾)
-	if (isShot2){
+	if (isShot2 && direct_Brack == 3){
 		if (act_dir == 2) { //右を向いていたら
-			shotBrack_x += 8;
-			DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0,0,0),TRUE);
+			direct_Brack = 2;
 		}
 		if (act_dir == 1) { //左を向いていたら
-			shotBrack_x -= 8;
-			DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
-
+			direct_Brack = 1;
+			
 		}
 	}
 
+	if (direct_Brack == 2) {
+		shotBrack_x += 8;
+		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
+	}
+	if (direct_Brack == 1) {
+		shotBrack_x -= 8;
+		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
+	}
 	//暗黒弾が画面外に出たら
-	if (shotBrack_x > 800 || shotBrack_x < 0) isShot2= false;
+	if (shotBrack_x > 800 || shotBrack_x < 0) {
+		isShot2 = false;
+		direct_Brack = 3;
+	}
+
+	//鉛弾の場合
+	if (isShot3 && direct_Bullet == 3) {
+		if (act_dir == 2) {
+			direct_Bullet = 2;
+		}
+		if (act_dir == 1) {
+			direct_Bullet = 1;
+		}
+		if (act_dir == 0) {
+			direct_Bullet = 0;
+		}
+	}
+
+	if (direct_Bullet == 2) {
+		shotBullet_x += 3;
+		DrawCircle(shotBullet_x, shotBullet_y, 10, GetColor(255, 0, 0), TRUE);
+	}
+	if (direct_Bullet == 1) {
+		shotBullet_x -= 3;
+		DrawCircle(shotBullet_x, shotBullet_y, 10, GetColor(255, 0, 0), TRUE);
+	}
+	if (direct_Bullet == 0) {
+		shotBullet_y -= 3;
+		DrawCircle(shotBullet_x, shotBullet_y, 10, GetColor(255, 0, 0), TRUE);
+	}
+	//鉛弾が画面外に出たら
+	if (shotBullet_x > 800 || shotBullet_x < 0 || shotBullet_y > 800 || shotBullet_y < 0) {
+		isShot3 = false;
+		direct_Bullet = 3;
+	}
 
 	//ジャンプ処理
 	if (!jFlag) { 
@@ -332,6 +412,11 @@ void Enemy_Move() {
 		
 		x_enemy--;
 		ene_dir = 1;
+
+		if (x_enemy < 0) {
+			x_enemy = 800;
+		}
+
 		if (x_enemy < 0) {
 			enemyLive = FALSE;
 			enemy2Live = TRUE;
@@ -600,6 +685,9 @@ void Item_Draw() {
 	if (isDrop && itemGet == FALSE) {
 		DrawRotaGraph(x_item, y_item, 1.0, 0.0, item_handle[7], TRUE);
 	}
+	if (item2Get == FALSE) {
+		DrawRotaGraph(x_item2, y_item2, 1.0, 0.0, item_handle[10], TRUE);
+	}
 }
 
 //操作方法描画
@@ -616,10 +704,14 @@ void SosaHoho_Draw() {
 
 //どのアビリティ(通常弾や暗黒弾など)が使えるかどうかを表示する
 void Abirity_Draw() {
-	DrawBox(0, 0, 200, 150, GetColor(125, 125, 125), TRUE);//バックの長方形
+	DrawBox(0, 0, 200, 140, GetColor(125, 125, 125), TRUE);//バックの長方形
 	DrawRotaGraph(32, 32, 1.0, 0.0, item_handle[7], TRUE); //クリスタル(暗黒弾を撃てるアイテム)のアイコン
 	DrawFormatString(64, 30, GetColor(0, 0, 0), "：%d", canBrackBallFlag);
 	if (canBrackBallFlag == 1) DrawFormatString(30, 47, GetColor(0, 0, 0), "(「暗黒弾」発射可能)");
+	
+	DrawRotaGraph(32, 88, 1.0, 0.0, item_handle[10], TRUE); //オーブ(鉛弾を撃てるアイテム)のアイコン
+	DrawFormatString(64, 80, GetColor(0, 0, 0), "：%d", canShotBulletFlag);
+	if (canShotBulletFlag == 1) DrawFormatString(30, 100, GetColor(0, 0, 0), "(「鉛弾」発射可能)");
 }
 
 int CheckHit(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
@@ -733,12 +825,16 @@ void CheckHitEnemy() {
 		}
 	}
 }
-
+//アイテムとの当たり判定
 void CheckHitItem() {
 	if (CheckHit(x, y, chara_width, chara_height, x_item, y_item, item_w, item_h)) {
 		canShotBrackball = true;
 		itemGet = TRUE;
 		canBrackBallFlag = 1;
+	}
+	if (CheckHit(x, y, chara_width, chara_height, x_item2, y_item2, item2_w, item2_h)) {
+		canShotBulletFlag = 1;
+		item2Get = TRUE;
 	}
 }
 
@@ -788,6 +884,12 @@ void Map_HitCheck() {
 						}
 					}
 				}
+				//鉛弾に触れた場合、それは破壊される
+				if (CheckHit(i * SIZE_MAP_X, j * SIZE_MAP_Y, SIZE_MAP_X, SIZE_MAP_Y, shotBullet_x, shotBullet_y, 32, 32)) {
+					if (data[i + j * NUM_MAP_X] != 10) {
+						data[i + j * NUM_MAP_X] = 0;
+					}
+				}
 			}
 		}
 	}
@@ -832,6 +934,8 @@ void AttackHit() {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow)
 {
 	ChangeWindowMode(TRUE);
+	
+	SetWindowText("弾丸突破バレットチョイス");
 
 	SetGraphMode(SCREEN_WIDTH,SCREEN_HEIGHT,32);
 
