@@ -32,8 +32,8 @@ int data[] = {
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,11,0,0,19,
 
-	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
-	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 11, 0, 0,  0, 0, 0, 0, 0,11,11,11,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 18, 0, 18, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
+	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 18, 0, 0,  0, 0, 0, 0, 0,11,11,11,0,19,
 	19, 13, 13, 13, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 11,11,0,0,0,19,
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,0,0,0,0,19,
@@ -62,14 +62,8 @@ void Map_Draw() {
 //キャラクタ定義
 const int chara_width = 32;
 const int chara_height = 32;
-
-
-
-const int enemy_width = 32; //敵キャラの幅、高さ
-const int enemy_height = 32;
-
-float x = (SCREEN_WIDTH - chara_width) / 2;
-float y = (SCREEN_HEIGHT - chara_height) / 2;
+float x = (SCREEN_WIDTH - chara_width) / 2 ;
+float y = (SCREEN_HEIGHT - chara_height) / 2 + 30;
 float yadd = 0.0f; //y方向の速度vy
 float gravity = 0.2f;
 float initVy = -6.0f; //y方向の初速度
@@ -114,9 +108,11 @@ int act_dir = 0;
 
 //エネミー情報
 
-//エネミー初期位置
+const int enemy_width = 32; //敵キャラの幅、高さ
+const int enemy_height = 32;
 float x_enemy = (SCREEN_WIDTH - enemy_width) / 2 + 100;
 float y_enemy = (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7;
+
 const int ENE_NUM_X = 3;
 const int ENE_NUM_Y = 3;
 const int ENE_NUM_ALL = ENE_NUM_X * ENE_NUM_Y;
@@ -185,6 +181,15 @@ int item2_handle[12];
 bool item2Get = FALSE;
 
 
+//タイトル画面定義
+//タイトル画面ハンドル
+int titleHandle;
+int title_x = 100;
+int title_y = 0;
+int title_w = 597;
+int title_h = 269;
+bool showTitle = TRUE;
+
 //キャラクタ初期化
 void Chara_Init() {
 	LoadDivGraph("obake.png", ACT_NUM_ALL, ACT_NUM_X, ACT_NUM_Y, chara_width, chara_height, chara_act);
@@ -209,11 +214,9 @@ void Item_Init() {
 	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item2_handle);
 }
 
-int fontHandle;
-
-//フォントデータ作成
-void CreateFontData() {
-	fontHandle = CreateFontToHandle("MSゴシック", 50, 9, DX_FONTTYPE_NORMAL);
+//タイトル画面ロード
+void Title_Init() {
+	titleHandle = LoadGraph("弾丸突破バレットチョイス　タイトル画面.png");
 }
 
 float speed = 3.0f;
@@ -228,14 +231,15 @@ void Chara_Move() {
 
 	//キー情報を取得
 	int input = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-
-	if (input & PAD_INPUT_RIGHT) { //右を向く
-		x++;
-		act_dir = 2;
-	}
-	if (input & PAD_INPUT_LEFT) { //左を向く
-		x--;
-		act_dir = 1;
+	if (showTitle == FALSE) {
+		if (input & PAD_INPUT_RIGHT) { //右移動
+			x++;
+			act_dir = 2;
+		}
+		if (input & PAD_INPUT_LEFT) { //左移動
+			x--;
+			act_dir = 1;
+		}
 	}
 	//上を向く(正面を向く)
 	if (input & PAD_INPUT_UP) {
@@ -284,6 +288,9 @@ void Chara_Move() {
 		if (act_dir == 1) { //左を向いていたら
 			direct = 1;
 		}
+		if (act_dir == 0) {
+			direct = 0;
+		}
 	}
 	//弾の向き(directの値)によって行先が変わる
 	if (direct == 2) {
@@ -294,9 +301,13 @@ void Chara_Move() {
 		shot_x -= 8;
 		DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
 	}
+	if (direct == 0) {
+		shot_y -= 8;
+		DrawCircle(shot_x, shot_y, 10, GetColor(255, 255, 255), TRUE);
+	}
 
 	//弾が画面外に出たら
-	if (shot_x > 800 || shot_x < 0) {
+	if (shot_x > 800 || shot_x < 0 || shot_y < 0) {
 		isShot = false;
 		direct = 3; //弾向きを初期化
 	}
@@ -307,7 +318,9 @@ void Chara_Move() {
 		}
 		if (act_dir == 1) { //左を向いていたら
 			direct_Brack = 1;
-			
+		}
+		if (act_dir == 0) {
+			direct_Brack = 0;
 		}
 	}
 
@@ -319,8 +332,12 @@ void Chara_Move() {
 		shotBrack_x -= 8;
 		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
 	}
+	if (direct_Brack == 0) {
+		shotBrack_y -= 8;
+		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
+	}
 	//暗黒弾が画面外に出たら
-	if (shotBrack_x > 800 || shotBrack_x < 0) {
+	if (shotBrack_x > 800 || shotBrack_x < 0 || shotBrack_y < 0) {
 		isShot2 = false;
 		direct_Brack = 3;
 	}
@@ -357,25 +374,26 @@ void Chara_Move() {
 	}
 
 	//ジャンプ処理
-	if (!jFlag) { 
-		if (input & PAD_INPUT_A) {
-			yadd = initVy;
-			jFlag = true;
+	if (showTitle == FALSE) {
+		if (!jFlag) {
+			if (input & PAD_INPUT_A) {
+				yadd = initVy;
+				jFlag = true;
+			}
+			y += yadd;
+			yadd += gravity;
+			yadd = std::min(30.0f, std::max(-30.0f, yadd));
 		}
-		y += yadd;
-		yadd += gravity;
-		yadd = std::min(30.0f, std::max(-30.0f, yadd));
-	}
-	if (jFlag) {
-		y += yadd;
-		yadd += gravity;
-		yadd = std::min(30.0f, std::max(-30.0f, yadd));
-		if (y > (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7) {
-			y = (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7;
-			jFlag = false;
+		if (jFlag) {
+			y += yadd;
+			yadd += gravity;
+			yadd = std::min(30.0f, std::max(-30.0f, yadd));
+			if (y > (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7) {
+				y = (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7;
+				jFlag = false;
+			}
 		}
 	}
-	
 }
 
 //キャラクタアニメーション更新
@@ -695,12 +713,20 @@ void SosaHoho_Draw() {
 	DrawFormatString(100, 580, GetColor(255, 255, 255), "←→キー：左右移動");
 	DrawFormatString(300, 580, GetColor(255, 255, 255), "Zキー：ジャンプ");
 	DrawFormatString(450, 580, GetColor(255, 255, 255), "Xキー：通常弾");
-	if (canShotBrackball) {
+	if (canShotBrackball && canShotBulletFlag == 0) {
 		DrawFormatString(600, 580, GetColor(255, 255, 255), "Cキー：暗黒弾");
+	}
+	if (canShotBrackball && canShotBulletFlag == 1) {
+		DrawFormatString(600, 580, GetColor(255, 255, 255), "C,Aキー：暗黒弾,鉛弾");
 	}
 }
 
-
+//タイトル描画関数
+void Draw_Title() {
+	if (showTitle) {
+		DrawGraph(title_x, title_y, titleHandle, FALSE);
+	}
+}
 
 //どのアビリティ(通常弾や暗黒弾など)が使えるかどうかを表示する
 void Abirity_Draw() {
@@ -838,6 +864,13 @@ void CheckHitItem() {
 	}
 }
 
+//タイトル画面との当たり判定
+void CheckHitTitle() {
+	if (CheckHit(shot_x, shot_y, 20, 20, title_x, title_y, title_w, title_h)) {
+		showTitle = FALSE;
+	}
+}
+
 void CheckDamage() {
 	if (damageCounter > 0) {
 		damaged = TRUE;
@@ -943,6 +976,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	//タイトル画面ロード
+	Title_Init();
+
 	//キャラクタロード
 	Chara_Init();
 	
@@ -960,9 +996,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 
 	//マップ初期化
 	Map_Init();
-
-	//フォント作成
-	CreateFontData();
 
 
 
@@ -1001,6 +1034,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 		//アイテムとの当たり判定
 		CheckHitItem();
 
+		//タイトル画面との当たり判定
+		CheckHitTitle();
+
 		//エネミー描画
 		Enemy_Draw();
 
@@ -1015,6 +1051,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 		
 		//アビリティ描画
 		Abirity_Draw();
+
+		//タイトル画面描画
+		Draw_Title();
 
 		ScreenFlip();
 	}
