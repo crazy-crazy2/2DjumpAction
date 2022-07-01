@@ -753,15 +753,23 @@ void Draw_Title() {
 
 //どのアビリティ(通常弾や暗黒弾など)が使えるかどうかを表示する
 void Abirity_Draw() {
-	if (gameCrear) return;
-	DrawBox(0, 0, 200, 140, GetColor(125, 125, 125), TRUE);//バックの長方形
-	DrawRotaGraph(32, 32, 1.0, 0.0, item_handle[7], TRUE); //クリスタル(暗黒弾を撃てるアイテム)のアイコン
-	DrawFormatString(64, 30, GetColor(0, 0, 0), "：%d", canBrackBallFlag);
-	if (canBrackBallFlag == 1) DrawFormatString(30, 47, GetColor(0, 0, 0), "(「暗黒弾」発射可能)");
-	
-	DrawRotaGraph(32, 88, 1.0, 0.0, item_handle[10], TRUE); //オーブ(鉛弾を撃てるアイテム)のアイコン
-	DrawFormatString(64, 80, GetColor(0, 0, 0), "：%d", canShotBulletFlag);
-	if (canShotBulletFlag == 1) DrawFormatString(30, 100, GetColor(0, 0, 0), "(「鉛弾」発射可能)");
+	if (gameCrear) {
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "【キャラクター・マップチップ】");
+		DrawFormatString(0, 32, GetColor(255, 255, 255), "ぴぽや倉庫 様");
+		DrawFormatString(0, 64, GetColor(255, 255, 255), "【BGM・SE】");
+		DrawFormatString(0, 96, GetColor(255, 255, 255), "魔王魂 様");
+		DrawFormatString(0, 96+32+32, GetColor(255, 255, 255), "created by Daiki Nara");
+	}
+	else {
+		DrawBox(0, 0, 200, 140, GetColor(125, 125, 125), TRUE);//バックの長方形
+		DrawRotaGraph(32, 32, 1.0, 0.0, item_handle[7], TRUE); //クリスタル(暗黒弾を撃てるアイテム)のアイコン
+		DrawFormatString(64, 30, GetColor(0, 0, 0), "：%d", canBrackBallFlag);
+		if (canBrackBallFlag == 1) DrawFormatString(30, 47, GetColor(0, 0, 0), "(「暗黒弾」発射可能)");
+
+		DrawRotaGraph(32, 88, 1.0, 0.0, item_handle[10], TRUE); //オーブ(鉛弾を撃てるアイテム)のアイコン
+		DrawFormatString(64, 80, GetColor(0, 0, 0), "：%d", canShotBulletFlag);
+		if (canShotBulletFlag == 1) DrawFormatString(30, 100, GetColor(0, 0, 0), "(「鉛弾」発射可能)");
+	}
 }
 
 int CheckHit(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
@@ -1022,6 +1030,12 @@ void IsClear() {
 			DrawFormatString(SCREEN_WIDTH / 2-100, SCREEN_HEIGHT / 2 + 50, GetColor(0, 255, 0), "Congratulations!!");
 			yadd = 0.0f;
 			gameCrear = TRUE;
+		}
+		else {
+			y = 0;
+			DrawBox(300, 0, 600, 100, GetColor(125, 100, 100), TRUE);//バックの長方形
+			DrawFormatString(300, 0, GetColor(255, 255, 255), "ヒント：");
+			DrawFormatString(300, 32, GetColor(0, 0, 255), "敵をたおしてから戻ってきて！");
 		}
 	}
 }
