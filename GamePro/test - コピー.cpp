@@ -19,6 +19,10 @@ int chip[NUM_CHIP_ALL];
 
 const int NUM_MAP_X = 25;
 const int NUM_MAP_Y = 18;
+
+//クリア判定用変数
+bool gameCrear = FALSE;
+
 int data[] = {
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
@@ -50,6 +54,7 @@ void Map_Init() {
 
 //マップ描画
 void Map_Draw() {
+	if (gameCrear) return;
 	//背景の表示
 	for (int j = 0; j < NUM_MAP_Y; j++) {
 		for (int i = 0; i < NUM_MAP_X; i++) {
@@ -58,6 +63,8 @@ void Map_Draw() {
 		}
 	}
 }
+
+
 
 //キャラクタ定義
 const int chara_width = 32;
@@ -162,6 +169,8 @@ int bat2_index = 0;
 int bat2_wait = 1;
 int bat2_dir = 0;
 bool live[2] = { FALSE,FALSE };
+bool killBat2[2] = { FALSE,FALSE };
+
 
 //アイテム(クリスタル)
 float x_item;
@@ -228,6 +237,10 @@ int direct_Bullet = 3;
 void Chara_Move() {
 	old_x = x;
 	old_y = y;
+
+	if (y > 600) y = 500;
+	if (x > 800) x = 100;
+	if (x < 0) x = 700;
 
 	//キー情報を取得
 	int input = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -366,6 +379,9 @@ void Chara_Move() {
 	if (direct_Bullet == 0) {
 		shotBullet_y -= 3;
 		DrawCircle(shotBullet_x, shotBullet_y, 10, GetColor(255, 0, 0), TRUE);
+		y = shotBullet_y -20;
+		yadd = 0.0f;
+		jFlag = FALSE;
 	}
 	//鉛弾が画面外に出たら
 	if (shotBullet_x > 800 || shotBullet_x < 0 || shotBullet_y > 800 || shotBullet_y < 0) {
@@ -418,6 +434,8 @@ void Chara_Update() {
 
 //キャラクタ描画
 void Chara_Draw() {
+	if (gameCrear) return;
+
 	int motion_index = act_motion[act_index];
 
 	DrawGraph(x, y, chara_act[motion_index + act_dir * ACT_DIR_SLIDE], TRUE);
@@ -689,10 +707,10 @@ void Enemy_Draw() {
 		DrawRotaGraph(x_bat, y_bat, 1.0, 0.0, bat_act[motion_index2 + bat_dir * ENE_DIR_SLIDE], TRUE); //画像の描画
 	}
 	//コウモリ２
-	if (live[0]) {
+	if (live[0] == TRUE && killBat2[0] == FALSE) {
 		DrawRotaGraph(x_bat2[0], y_bat2[0], 1.0, 0.0, bat1_act[motion_index3 + bat2_dir * ENE_DIR_SLIDE], TRUE); //画像の描画
 	}
-	if (live[1]) {
+	if (live[1] == TRUE && killBat2[1] == FALSE) {
 		DrawRotaGraph(x_bat2[1], y_bat2[1], 1.0, 0.0, bat2_act[motion_index4 + bat2_dir * ENE_DIR_SLIDE], TRUE); //画像の描画
 
 	}
@@ -710,14 +728,19 @@ void Item_Draw() {
 
 //操作方法描画
 void SosaHoho_Draw() {
-	DrawFormatString(100, 580, GetColor(255, 255, 255), "←→キー：左右移動");
-	DrawFormatString(300, 580, GetColor(255, 255, 255), "Zキー：ジャンプ");
-	DrawFormatString(450, 580, GetColor(255, 255, 255), "Xキー：通常弾");
-	if (canShotBrackball && canShotBulletFlag == 0) {
-		DrawFormatString(600, 580, GetColor(255, 255, 255), "Cキー：暗黒弾");
+	if (gameCrear == FALSE) {
+		DrawFormatString(100, 580, GetColor(255, 255, 255), "←→キー：左右移動");
+		DrawFormatString(300, 580, GetColor(255, 255, 255), "Zキー：ジャンプ");
+		DrawFormatString(450, 580, GetColor(255, 255, 255), "Xキー：通常弾");
+		if (canShotBrackball && canShotBulletFlag == 0) {
+			DrawFormatString(600, 580, GetColor(255, 255, 255), "Cキー：暗黒弾");
+		}
+		if (canShotBrackball && canShotBulletFlag == 1) {
+			DrawFormatString(600, 580, GetColor(255, 255, 255), "C,Aキー：暗黒弾,鉛弾");
+		}
 	}
-	if (canShotBrackball && canShotBulletFlag == 1) {
-		DrawFormatString(600, 580, GetColor(255, 255, 255), "C,Aキー：暗黒弾,鉛弾");
+	else {
+		DrawFormatString(100, 580, GetColor(255, 255, 255), "エスケープキー：ゲーム終了");
 	}
 }
 
@@ -730,6 +753,7 @@ void Draw_Title() {
 
 //どのアビリティ(通常弾や暗黒弾など)が使えるかどうかを表示する
 void Abirity_Draw() {
+	if (gameCrear) return;
 	DrawBox(0, 0, 200, 140, GetColor(125, 125, 125), TRUE);//バックの長方形
 	DrawRotaGraph(32, 32, 1.0, 0.0, item_handle[7], TRUE); //クリスタル(暗黒弾を撃てるアイテム)のアイコン
 	DrawFormatString(64, 30, GetColor(0, 0, 0), "：%d", canBrackBallFlag);
@@ -792,61 +816,65 @@ void CheckHitEnemy() {
 			}
 		}
 	}
-	//暗黒弾で止まった場合コウモリ２－１
-	if (isBind) {
-		if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
-			if (y >= old_y) {
-				if (old_y <= y_bat2[0]) {
-					yadd = 0.0f;
-					jFlag = false;
+	if (live[0] == TRUE && killBat2[0] == FALSE) {
+		//暗黒弾で止まった場合コウモリ２－１
+		if (isBind) {
+			if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
+				if (y >= old_y) {
+					if (old_y <= y_bat2[0]) {
+						yadd = 0.0f;
+						jFlag = false;
+					}
+				}
+			}
+		}
+		else {//暗黒弾で止まっていない場合コウモリ２－１
+			if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height) && count == 0) {
+				damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
+				count = 10;
+			}
+			if (count > 0) {
+				--count;
+				if (count <= 0) {
+					count = 0;
+				}
+			}
+			if (damageCounter > 0) {
+				--damageCounter;
+				if (damageCounter <= 0) {
+					damageCounter = 0;
 				}
 			}
 		}
 	}
-	else {//暗黒弾で止まっていない場合コウモリ２－１
-		if (CheckHit(x, y, chara_width, chara_height, x_bat2[0], y_bat2[0], enemy_width, enemy_height) && count == 0) {
-			damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
-			count = 10;
-		}
-		if (count > 0) {
-			--count;
-			if (count <= 0) {
-				count = 0;
-			}
-		}
-		if (damageCounter > 0) {
-			--damageCounter;
-			if (damageCounter <= 0) {
-				damageCounter = 0;
-			}
-		}
-	}
-	//暗黒弾で止まった場合コウモリ２－２
-	if (isBind2) {
-		if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
-			if (y >= old_y) {
-				if (old_y <= y_bat2[1]) {
-					yadd = 0.0f;
-					jFlag = false;
+	if (live[1] == TRUE && killBat2[1] == FALSE) {
+		//暗黒弾で止まった場合コウモリ２－２
+		if (isBind2) {
+			if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
+				if (y >= old_y) {
+					if (old_y <= y_bat2[1]) {
+						yadd = 0.0f;
+						jFlag = false;
+					}
 				}
 			}
 		}
-	}
-	else {//暗黒弾で止まっていない場合コウモリ２－２
-		if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height) && count == 0) {
-			damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
-			count = 10;
-		}
-		if (count > 0) {
-			--count;
-			if (count <= 0) {
-				count = 0;
+		else {//暗黒弾で止まっていない場合コウモリ２－２
+			if (CheckHit(x, y, chara_width, chara_height, x_bat2[1], y_bat2[1], enemy_width, enemy_height) && count == 0) {
+				damageCounter = 10; //ダメージカウンターが正のときはダメージを受けている＝硬直
+				count = 10;
 			}
-		}
-		if (damageCounter > 0) {
-			--damageCounter;
-			if (damageCounter <= 0) {
-				damageCounter = 0;
+			if (count > 0) {
+				--count;
+				if (count <= 0) {
+					count = 0;
+				}
+			}
+			if (damageCounter > 0) {
+				--damageCounter;
+				if (damageCounter <= 0) {
+					damageCounter = 0;
+				}
 			}
 		}
 	}
@@ -868,6 +896,19 @@ void CheckHitItem() {
 void CheckHitTitle() {
 	if (CheckHit(shot_x, shot_y, 20, 20, title_x, title_y, title_w, title_h)) {
 		showTitle = FALSE;
+	}
+}
+
+//鉛弾との当たり判定
+void CheckHitBullet() {
+	if (CheckHit(x, y, chara_width, chara_height, shotBullet_x+30, shotBullet_y+30, 20, 20)) {
+		if (y >= old_y) {
+			if (old_y <= shotBullet_y) {
+				yadd = 0.0f;
+				jFlag = false;
+			}
+		}
+		
 	}
 }
 
@@ -950,6 +991,10 @@ void AttackHit() {
 	if (CheckHit(shotBrack_x, shotBrack_y, 20, 20, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
 		isBind = TRUE; //停止
 	}
+	//コウモリ２の１に攻撃(鉛弾)で倒す
+	if (CheckHit(shotBullet_x, shotBullet_y, 20, 20, x_bat2[0], y_bat2[0], enemy_width, enemy_height)) {
+		killBat2[0] = TRUE;
+	}
 	//コウモリ２の２に攻撃(通常弾)
 	if (CheckHit(shot_x, shot_y, 20, 20, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
 		if (isBind2) {
@@ -960,9 +1005,32 @@ void AttackHit() {
 	if (CheckHit(shotBrack_x, shotBrack_y, 20, 20, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
 		isBind2 = TRUE; //停止
 	}
+	//コウモリ２の２に攻撃(鉛弾)で倒す
+	if (CheckHit(shotBullet_x, shotBullet_y, 20, 20, x_bat2[1], y_bat2[1], enemy_width, enemy_height)) {
+		killBat2[1] = TRUE;
+	}
 }
 
+//クリア判定
+void IsClear() {
+	//画面上部へ行ったか
+	if (y < 0) {
+		//コウモリ２体倒していたら
+		if (killBat2[0] == TRUE && killBat2[1] == TRUE) {
+			//クリア画面表示
+			DrawFormatString(SCREEN_WIDTH / 2 -100, SCREEN_HEIGHT / 2, GetColor(255, 255, 255), "You cleared it !");
+			DrawFormatString(SCREEN_WIDTH / 2-100, SCREEN_HEIGHT / 2 + 50, GetColor(0, 255, 0), "Congratulations!!");
+			yadd = 0.0f;
+			gameCrear = TRUE;
+		}
+	}
+}
 
+void End() {
+	if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
+		DxLib_End();
+	}
+}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow)
 {
@@ -1037,6 +1105,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 		//タイトル画面との当たり判定
 		CheckHitTitle();
 
+		//鉛弾との当たり判定
+		CheckHitBullet();
+		
 		//エネミー描画
 		Enemy_Draw();
 
@@ -1054,6 +1125,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 
 		//タイトル画面描画
 		Draw_Title();
+
+		//クリア判定
+		IsClear();
+		
+		//エンド処理
+		End();
 
 		ScreenFlip();
 	}
