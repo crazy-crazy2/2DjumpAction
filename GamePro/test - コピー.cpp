@@ -64,7 +64,29 @@ void Map_Draw() {
 	}
 }
 
+//Music系のハンドル
+//BGM//
+int bgmHandle;
+//SE//
+int jumpSEHandle;
+int shotSEHandle;
+int shotBrackSEHandle;
+int shotBulletSEHandle;
 
+int getItemSEHandle;
+
+int clearSEHandle;
+
+//BGM,SE初期化、ロード
+void Music_Init() {
+	jumpSEHandle = LoadSoundMem("魔王魂 効果音 システム38.ogg");
+	bgmHandle = LoadSoundMem("魔王魂  8bit29.ogg");
+	shotSEHandle = LoadSoundMem("魔王魂  銃02.ogg");
+	shotBrackSEHandle = LoadSoundMem("魔王魂  銃05.ogg");
+	shotBulletSEHandle = LoadSoundMem("魔王魂  爆発05.ogg");
+	getItemSEHandle = LoadSoundMem("魔王魂 効果音 システム10.ogg");
+	clearSEHandle = LoadSoundMem("魔王魂 効果音 ジングル12.ogg");
+}
 
 //キャラクタ定義
 const int chara_width = 32;
@@ -141,23 +163,20 @@ bool enemyLive = TRUE;
 //コウモリ
 float x_bat = (SCREEN_WIDTH - enemy_width) / 2 - 100;
 float y_bat = (SCREEN_HEIGHT - enemy_height) / 2;
-//const int ENE_NUM_X = 3;
-//const int ENE_NUM_Y = 3;
-//const int ENE_NUM_ALL = ENE_NUM_X * ENE_NUM_Y;
-//
-//const int ENE_DIR_SLIDE = ENE_NUM_X;
+
 
 int bat_act[12];
 
 int bat_motion[] = { 0,1,2,1 };
 int bat_index = 0;
-//const int MAX_ENE_MOTION_INDEX = 4;
 
 int bat_wait = 1;
 
 int bat_dir = 0;
 
 bool enemy2Live = FALSE;
+
+bool killBat = FALSE;
 
 //コウモリ2体
 float x_bat2[2] = { 100.0f,500.0f };
@@ -264,6 +283,7 @@ void Chara_Move() {
 
 		//弾を表示
 		if (input & PAD_INPUT_B) {
+			PlaySoundMem(shotSEHandle, DX_PLAYTYPE_BACK);
 			shot_x = x + 16;
 			shot_y = y + 16;
 			isShot = true;
@@ -275,6 +295,7 @@ void Chara_Move() {
 
 		//弾を表示
 		if (input & PAD_INPUT_C){
+			PlaySoundMem(shotBrackSEHandle, DX_PLAYTYPE_BACK);
 			shotBrack_x = x + 16;
 			shotBrack_y = y + 16;
 			isShot2= true;
@@ -287,6 +308,7 @@ void Chara_Move() {
 
 			//弾を表示
 			if (input & PAD_INPUT_X) {
+				PlaySoundMem(shotBulletSEHandle, DX_PLAYTYPE_BACK);
 				shotBullet_x = x + 16;
 				shotBullet_y = y + 16;
 				isShot3 = true;
@@ -393,6 +415,7 @@ void Chara_Move() {
 	if (showTitle == FALSE) {
 		if (!jFlag) {
 			if (input & PAD_INPUT_A) {
+				PlaySoundMem(jumpSEHandle, DX_PLAYTYPE_BACK);
 				yadd = initVy;
 				jFlag = true;
 			}
@@ -703,7 +726,7 @@ void Enemy_Draw() {
 	DrawGraph(x_enemy, y_enemy, enemy_act[motion_index + ene_dir * ENE_DIR_SLIDE], TRUE);
 	}
 	//最初のコウモリ
-	if (enemy2Live) {
+	if (enemy2Live && killBat == FALSE) {
 		DrawRotaGraph(x_bat, y_bat, 1.0, 0.0, bat_act[motion_index2 + bat_dir * ENE_DIR_SLIDE], TRUE); //画像の描画
 	}
 	//コウモリ２
@@ -887,14 +910,17 @@ void CheckHitEnemy() {
 		}
 	}
 }
+
 //アイテムとの当たり判定
 void CheckHitItem() {
-	if (CheckHit(x, y, chara_width, chara_height, x_item, y_item, item_w, item_h)) {
+	if (CheckHit(x, y, chara_width, chara_height, x_item, y_item, item_w, item_h) && canBrackBallFlag == 0) {
+		PlaySoundMem(getItemSEHandle, DX_PLAYTYPE_BACK);
 		canShotBrackball = true;
 		itemGet = TRUE;
 		canBrackBallFlag = 1;
 	}
-	if (CheckHit(x, y, chara_width, chara_height, x_item2, y_item2, item2_w, item2_h)) {
+	if (CheckHit(x, y, chara_width, chara_height, x_item2, y_item2, item2_w, item2_h) && canShotBulletFlag == 0) {
+		PlaySoundMem(getItemSEHandle, DX_PLAYTYPE_BACK);
 		canShotBulletFlag = 1;
 		item2Get = TRUE;
 	}
@@ -986,6 +1012,7 @@ void AttackHit() {
 	//コウモリに攻撃
 	if (CheckHit(shot_x, shot_y, 20, 20, x_bat, y_bat, enemy_width, enemy_height)) {
 		enemy2Live = FALSE;
+		killBat = TRUE;
 		Item_Drop(x_bat,y_bat); //アイテムドロップ
 		if (live[0] == FALSE && live[1] == FALSE) { live[0] = TRUE; live[1] = TRUE; } //第3ウェーブへ
 	}
@@ -1024,11 +1051,9 @@ void IsClear() {
 	//画面上部へ行ったか
 	if (y < 0) {
 		//コウモリ２体倒していたら
-		if (killBat2[0] == TRUE && killBat2[1] == TRUE) {
-			//クリア画面表示
-			DrawFormatString(SCREEN_WIDTH / 2 -100, SCREEN_HEIGHT / 2, GetColor(255, 255, 255), "You cleared it !");
-			DrawFormatString(SCREEN_WIDTH / 2-100, SCREEN_HEIGHT / 2 + 50, GetColor(0, 255, 0), "Congratulations!!");
-			yadd = 0.0f;
+		if (killBat2[0] == TRUE && killBat2[1] == TRUE && gameCrear == FALSE) {
+			StopSoundMem(bgmHandle);
+			PlaySoundMem(clearSEHandle, DX_PLAYTYPE_BACK);
 			gameCrear = TRUE;
 		}
 		else {
@@ -1039,8 +1064,14 @@ void IsClear() {
 		}
 	}
 }
-
+//エンド処理関数
 void End() {
+	if (gameCrear) {
+		//クリア画面表示
+		DrawFormatString(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, GetColor(255, 255, 255), "You cleared it !");
+		DrawFormatString(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 + 50, GetColor(0, 255, 0), "Congratulations!!");
+		yadd = 0.0f;
+	}
 	if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
 		DxLib_End();
 	}
@@ -1079,7 +1110,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	//マップ初期化
 	Map_Init();
 
+	//BGM,SE初期化
+	Music_Init();
 
+	PlaySoundMem(bgmHandle, DX_PLAYTYPE_LOOP);
 
 	//メインループ///
 	while (ProcessMessage() == 0) {
