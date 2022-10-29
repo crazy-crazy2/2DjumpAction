@@ -20,6 +20,8 @@ int canjumpFrag = 1; //ジャンプできるか
 int v0 = 0; //初速度
 int time = 0;
 double gravity = 0.5;
+double y_prev = y; //マリオジャンプのときの前回のy座標を格納する変数。１フレーム前のy座標
+double F = -1.0f; //マリオジャンプのときに加える力。ジャンプのときは-10,それ以外は-1
 
 //エネミー定義
 const int enemy_width = 32;
@@ -54,10 +56,32 @@ void SinGravity(double* y,int yuka) {
 	
 }
 //sin波を利用したジャンプ
-void SinJump() {
-	if (canjumpFrag) {
-		canjumpFrag = 0;
-		jumpFrames = 0;
+void SinJump(int* inputP) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag) {
+			canjumpFrag = 0;
+			jumpFrames = 0;
+		}
+	}
+}
+//サインジャンプセット
+void SinJumpGravity(int* inputP, double* y, int yuka) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag) {
+			canjumpFrag = 0;
+			jumpFrames = 0;
+		}
+	}
+	if (canjumpFrag == 0) {
+
+		*y = -heightJump * sin(radPerFrame * jumpFrames) + yuka;
+		jumpFrames += 1;
+
+		if (*y > yuka) {
+			*y = yuka;
+			canjumpFrag = 1;
+		}
+
 	}
 }
 
@@ -71,14 +95,73 @@ void PhysicsGravity(double* y, int* v0, int yuka, int time) {
 	}
 }
 //物理公式のジャンプ
-void PhysicsJump(int* v0,int* time) {
-	
-	if (canjumpFrag == 1) {
-		*v0 = 10;
-		*time = 0;
-		canjumpFrag = 0;
-	}	
+void PhysicsJump(int* v0,int* time,int* inputP) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag == 1) {
+			*v0 = 10;
+			*time = 0;
+			canjumpFrag = 0;
+		}
+	}
 }
+//物理法則ジャンプセット
+void PhysicsJumpGravity(int* inputP,int* v0,int* time,double* y,int yuka) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag == 1) {
+			*v0 = 10;
+			*time = 0;
+			canjumpFrag = 0;
+		}
+	}
+
+	*y = (0.5 * gravity * (*time) * (*time) - *v0 * (*time)) + yuka;
+
+	if (*y >= yuka) {
+		*y = yuka;
+		canjumpFrag = 1;
+	}
+}
+
+//マリオジャンプ(前の位置情報との加減算のみのジャンプ)
+void MarioJump(int* inputP) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag == 1) {
+			F = -10.0;
+			canjumpFrag = 0;
+		}
+	}
+}
+//マリオグラビティ
+void MarioGravity(double* y,double* y_p,int yuka) {
+	double y_temp = *y;
+	*y += (*y - *y_p) + F;
+	*y_p = y_temp;
+	F = 1;
+
+	if (*y >= yuka) {
+		*y = yuka;
+		canjumpFrag = 1;
+	}
+}
+//マリオジャンプセット(ジャンプと重力の一体型)
+void MarioJumpGravity(int* inputP, double* y, double* y_p, int yuka) {
+	if (*inputP & PAD_INPUT_1) {
+		if (canjumpFrag == 1) {
+			F = -10.0;
+			canjumpFrag = 0;
+		}
+	}
+	double y_temp = *y;
+	*y += (*y - *y_p) + F;
+	*y_p = y_temp;
+	F = 1;
+
+	if (*y >= yuka) {
+		*y = yuka;
+		canjumpFrag = 1;
+	}
+}
+
 int yuka = SCREEN_HEIGHT - 50;
 //キャラ移動
 void Chara_Move() {
@@ -89,15 +172,24 @@ void Chara_Move() {
 	if (input & PAD_INPUT_LEFT) {
 		x -= 5;
 	}
-	if (input & PAD_INPUT_1) {
-		//利用したい関数以外はコメントにすること
-		//PhysicsJump(&v0, &time);
-		SinJump();
-	}
 
-	//利用したい関数に合わせた関数(PhysicsJumpを使いたければPhysicsGravityといったように)をコメント外しすること。それ以外はコメントにすること。
+	//ジャンプ関数(別々)。ジャンプセットからジャンプ要素だけを関数化。
+	//PhysicsJump(&v0, &time,&input);
+	//SinJump(&input);
+	//MarioJump(&input);
+	
+
+	//重力関数(別々)。ジャンプセットから重力要素だけを関数化。利用したい関数に合わせた関数(PhysicsJumpを使いたければPhysicsGravityといったように)をコメント外しすること。それ以外はコメントにすること。
 	//PhysicsGravity(&y, &v0, 450, time);
-	SinGravity(&y, 450);
+	//SinGravity(&y, 450);
+	//MarioGravity(&y, &y_prev,yuka);
+	
+	//ジャンプセット(ジャンプと重力の関数を合わせた関数。面倒な人はこれひとつでジャンプと重力を実装できる)
+	SinJumpGravity(&input, &y, yuka);
+	//PhysicsJumpGravity(&input, &v0, &time, &y, yuka); //物理法則ジャンプセット
+	//MarioJumpGravity(&input, &y, &y_prev, yuka); //マリオジャンプセット
+
+
 
 	time += 1;
 }

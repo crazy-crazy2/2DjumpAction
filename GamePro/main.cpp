@@ -17,12 +17,14 @@ const int NUM_CHIP_Y = 4;
 const int NUM_CHIP_ALL = NUM_CHIP_X * NUM_CHIP_Y;
 int chip[NUM_CHIP_ALL];
 
+//マップチップ数
 const int NUM_MAP_X = 25;
 const int NUM_MAP_Y = 18;
 
 //クリア判定用変数
 bool gameCrear = FALSE;
 
+//ステージデータ
 int data[] = {
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
 	19, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,0,0,0,19,
@@ -54,7 +56,7 @@ void Map_Init() {
 
 //マップ描画
 void Map_Draw() {
-	if (gameCrear) return;
+	if (gameCrear) return; //クリアフラグが建っていたら飛ばす
 	//背景の表示
 	for (int j = 0; j < NUM_MAP_Y; j++) {
 		for (int i = 0; i < NUM_MAP_X; i++) {
@@ -89,12 +91,12 @@ void Music_Init() {
 }
 
 //キャラクタ定義
-const int chara_width = 32;
-const int chara_height = 32;
-float x = (SCREEN_WIDTH - chara_width) / 2 ;
-float y = (SCREEN_HEIGHT - chara_height) / 2 + 30;
+const int chara_width = 32; //キャラクタの幅
+const int chara_height = 32; //キャラクタの高さ
+float x = (SCREEN_WIDTH - chara_width) / 2 ; //キャラクタのx座標
+float y = (SCREEN_HEIGHT - chara_height) / 2 + 30; //キャラクタのy座標
 float yadd = 0.0f; //y方向の速度vy
-float gravity = 0.2f;
+float gravity = 0.2f; //重力
 float initVy = -6.0f; //y方向の初速度
 //前回の位置
 float old_x = 0.0f;
@@ -110,47 +112,47 @@ int shotBrack_x = 0; //暗黒弾が出る位置
 int shotBrack_y = 0;
 int shotBullet_x = 0; //鉛弾が出る位置
 int shotBullet_y = 0;
-bool isShot = false;
-bool isShot2 = false; //動きを止める弾(暗黒弾)
-bool isShot3 = false; //
-bool canShotBrackball = false; //動きを止める弾(暗黒弾)が撃てるかどうか
-int canBrackBallFlag = 0; //intの暗黒弾が撃てるかのフラグ
-int canShotBulletFlag = 0;
+bool isShot = false; //通常弾を撃っているか
+bool isShot2 = false; //動きを止める弾(暗黒弾)を撃っているか
+bool isShot3 = false; //鉛玉を撃っているか
+bool canShotBrackball = false; //動きを止める弾(暗黒弾)が「撃てるか」どうか
+int canBrackBallFlag = 0; //暗黒弾が「撃てるか」のフラグ(int)
+int canShotBulletFlag = 0; //鉛弾が撃てるかのフラグ
 
 bool jFlag = FALSE; //ジャンプフラグ
 
-int chara_act[12];
+int chara_act[12]; //キャラクタ画像格納
 
-int act_motion[] = { 0,1,2,1, };
-int act_index = 0;
-const int MAX_MOTION_INDEX = 4;
+int act_motion[] = { 0,1,2,1, }; //アニメーションモーション
+int act_index = 0; 
+const int MAX_MOTION_INDEX = 4; //モーション最大数
 
-const int ACT_SPEED = 20;
+const int ACT_SPEED = 20; //アニメーション変化の速度
 int act_wait = ACT_SPEED;
-const int ACT_NUM_X = 3;
-const int ACT_NUM_Y = 4;
-const int ACT_NUM_ALL = ACT_NUM_X * ACT_NUM_Y;
+const int ACT_NUM_X = 3; //キャラチップの数x
+const int ACT_NUM_Y = 4; //キャラチップの数y
+const int ACT_NUM_ALL = ACT_NUM_X * ACT_NUM_Y; //キャラチップの合計数
 
-const int ACT_DIR_SLIDE = ACT_NUM_X;
+const int ACT_DIR_SLIDE = ACT_NUM_X; //いまどのチップを選択しているか
 
-int act_dir = 0;
+int act_dir = 0; //キャラクタの向き
 
 //エネミー情報
 
-const int enemy_width = 32; //敵キャラの幅、高さ
+const int enemy_width = 32; //敵キャラ　ゴーストの幅、高さ
 const int enemy_height = 32;
-float x_enemy = (SCREEN_WIDTH - enemy_width) / 2 + 100;
+float x_enemy = (SCREEN_WIDTH - enemy_width) / 2 + 100; //ゴーストのx,y座標
 float y_enemy = (SCREEN_HEIGHT - enemy_height) / 2 + 32 * 7;
 
-const int ENE_NUM_X = 3;
+const int ENE_NUM_X = 3; //ゴーストのキャラチップ数
 const int ENE_NUM_Y = 3;
 const int ENE_NUM_ALL = ENE_NUM_X * ENE_NUM_Y;
 
-const int ENE_DIR_SLIDE = ENE_NUM_X;
+const int ENE_DIR_SLIDE = ENE_NUM_X; //いまどのチップを選択しているか
 
-int enemy_act[12];
+int enemy_act[12]; //ゴーストのチップ格納
 
-int ene_motion[] = { 0,1,2,1 };
+int ene_motion[] = { 0,1,2,1 }; //ゴーストのアニメーションモーション
 int ene_index = 0;
 const int MAX_ENE_MOTION_INDEX = 4;
 
@@ -158,25 +160,26 @@ int ene_wait = 1; //エネミースピード
 
 int ene_dir = 0;
 
-bool enemyLive = TRUE;
+bool enemyLive = TRUE; //ゴーストが生きているかどうかのフラグ
 
 //コウモリ
 float x_bat = (SCREEN_WIDTH - enemy_width) / 2 - 100;
 float y_bat = (SCREEN_HEIGHT - enemy_height) / 2;
 
-
+//コウモリのキャラチップ数
 int bat_act[12];
-
+//コウモリのアニメーションモーション
 int bat_motion[] = { 0,1,2,1 };
 int bat_index = 0;
 
 int bat_wait = 1;
 
+//コウモリの向き
 int bat_dir = 0;
 
-bool enemy2Live = FALSE;
+bool enemy2Live = FALSE; //コウモリが生きているかどうかフラグ
 
-bool killBat = FALSE;
+bool killBat = FALSE; //コウモリを殺したかどうかのフラグ
 
 //コウモリ2体
 float x_bat2[2] = { 100.0f,500.0f };
@@ -187,36 +190,36 @@ int bat2_motion[] = { 0,1,2,1 };
 int bat2_index = 0;
 int bat2_wait = 1;
 int bat2_dir = 0;
-bool live[2] = { FALSE,FALSE };
-bool killBat2[2] = { FALSE,FALSE };
+bool live[2] = { FALSE,FALSE }; //それぞれのコウモリの生きているかどうかフラグ
+bool killBat2[2] = { FALSE,FALSE }; //それぞれのコウモリを殺したかどうかのフラグ
 
 
 //アイテム(クリスタル)
-float x_item;
+float x_item; //x,y座標
 float y_item;
-int item_w = 32;
+int item_w = 32;//幅、高さ
 int item_h = 32;
-bool isDrop = FALSE;
-int item_handle[12];
-bool itemGet = FALSE;
+bool isDrop = FALSE; //落としたかどうか
+int item_handle[12]; //クリスタルの画像ハンドル
+bool itemGet = FALSE; //クリスタルを手に入れたか
 
 //アイテム２(オーブ)
-float x_item2 = 90;
+float x_item2 = 90; //x,y
 float y_item2 = 370;
-int item2_w = 32;
+int item2_w = 32; //幅、高さ
 int item2_h = 32;
-int item2_handle[12];
-bool item2Get = FALSE;
+int item2_handle[12]; //オーブの画像ハンドル
+bool item2Get = FALSE; //オーブを手に入れたか
 
 
 //タイトル画面定義
 //タイトル画面ハンドル
 int titleHandle;
-int title_x = 100;
+int title_x = 100; //x,y
 int title_y = 0;
-int title_w = 597;
+int title_w = 597; //幅、高さ
 int title_h = 269;
-bool showTitle = TRUE;
+bool showTitle = TRUE; //タイトルを表示しているかどうか
 
 //キャラクタ初期化
 void Chara_Init() {
@@ -238,8 +241,8 @@ void Bat2_Init() {
 }
 //アイテム初期化
 void Item_Init() {
-	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item_handle);
-	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item2_handle);
+	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item_handle); //クリスタルをロード
+	LoadDivGraph("pipo-etcchara002b.png", 12, 3, 4, 32, 32, item2_handle);//オーブをロード
 }
 
 //タイトル画面ロード
@@ -247,23 +250,26 @@ void Title_Init() {
 	titleHandle = LoadGraph("弾丸突破バレットチョイス　タイトル画面.png");
 }
 
+//弾丸の速度と向きを記憶する変数
 float speed = 3.0f;
 int direct = 3; //0:上　1:左　2:右　3:なし
-int direct_Brack = 3;
-int direct_Bullet = 3;
+int direct_Brack = 3; //暗黒弾版
+int direct_Bullet = 3; //鉛弾版
 
 //キャラクタ移動
 void Chara_Move() {
+	//前の位置
 	old_x = x;
 	old_y = y;
 
+	//画面の外に行けば画面内に戻す
 	if (y > 600) y = 500;
 	if (x > 800) x = 100;
 	if (x < 0) x = 700;
 
 	//キー情報を取得
 	int input = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (showTitle == FALSE) {
+	if (showTitle == FALSE) { //タイトルが表示されていなければ(タイトルをぶっ壊していたら動かせる)
 		if (input & PAD_INPUT_RIGHT) { //右移動
 			x++;
 			act_dir = 2;
@@ -291,7 +297,7 @@ void Chara_Move() {
 	}
 
 	//弾が出ていないとき２
-	if (isShot2== false && canShotBrackball == true) {
+	if (isShot2== false && canShotBrackball == true) { //暗黒弾は撃てるが、まだ撃ってない状態のとき
 
 		//弾を表示
 		if (input & PAD_INPUT_C){
@@ -303,8 +309,8 @@ void Chara_Move() {
 	}
 	
 	//弾が出ていないとき３
-	if (canShotBulletFlag == 1) {
-		if (isShot3 == false) {
+	if (canShotBulletFlag == 1) { //鉛弾を撃てるとき
+		if (isShot3 == false) { //まだ撃ってないとき
 
 			//弾を表示
 			if (input & PAD_INPUT_X) {
@@ -358,7 +364,7 @@ void Chara_Move() {
 			direct_Brack = 0;
 		}
 	}
-
+	//向きによって行き先を変える
 	if (direct_Brack == 2) {
 		shotBrack_x += 8;
 		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
@@ -371,7 +377,7 @@ void Chara_Move() {
 		shotBrack_y -= 8;
 		DrawCircle(shotBrack_x, shotBrack_y, 10, GetColor(0, 0, 0), TRUE);
 	}
-	//暗黒弾が画面外に出たら
+	//暗黒弾が画面外に出たら消す
 	if (shotBrack_x > 800 || shotBrack_x < 0 || shotBrack_y < 0) {
 		isShot2 = false;
 		direct_Brack = 3;
@@ -389,7 +395,7 @@ void Chara_Move() {
 			direct_Bullet = 0;
 		}
 	}
-
+	//鉛弾の向きによって行き先を変える
 	if (direct_Bullet == 2) {
 		shotBullet_x += 3;
 		DrawCircle(shotBullet_x, shotBullet_y, 10, GetColor(255, 0, 0), TRUE);
@@ -405,7 +411,7 @@ void Chara_Move() {
 		yadd = 0.0f;
 		jFlag = FALSE;
 	}
-	//鉛弾が画面外に出たら
+	//鉛弾が画面外に出たら消す
 	if (shotBullet_x > 800 || shotBullet_x < 0 || shotBullet_y > 800 || shotBullet_y < 0) {
 		isShot3 = false;
 		direct_Bullet = 3;
@@ -421,7 +427,7 @@ void Chara_Move() {
 			}
 			y += yadd;
 			yadd += gravity;
-			yadd = std::min(30.0f, std::max(-30.0f, yadd));
+			yadd = std::min(30.0f, std::max(-30.0f, yadd)); //丸め
 		}
 		if (jFlag) {
 			y += yadd;
@@ -463,7 +469,7 @@ void Chara_Draw() {
 
 	DrawGraph(x, y, chara_act[motion_index + act_dir * ACT_DIR_SLIDE], TRUE);
 }
-
+//ゴーストの移動関数
 void Enemy_Move() {
 
 	const float speed = 1.0f;
@@ -484,7 +490,7 @@ void Enemy_Move() {
 	}
 }
 //最初のコウモリ用
-bool isBottom = FALSE;
+bool isBottom = FALSE; //それぞれ下にいるか、上にいるか、左にいるか、右にいるか確認するフラグ
 bool isTop = TRUE;
 bool isLeft = TRUE;
 bool isRight = FALSE;
@@ -492,7 +498,7 @@ bool migikara;//右から降りてきたか
 bool hidarikara;//左から降りてきたか
 
 //コウモリ２の１用
-bool isBottom1 = FALSE;
+bool isBottom1 = FALSE; //それぞれ下にいるか、上にいるか、左にいるか、右にいるか確認するフラグ
 bool isTop1 = TRUE;
 bool isLeft1 = TRUE;
 bool isRight1 = FALSE;
@@ -501,7 +507,7 @@ bool hidarikara1;//左から降りてきたか
 bool isBind = FALSE;
 
 //コウモリ２の２用
-bool isBottom2 = FALSE;
+bool isBottom2 = FALSE; //それぞれ下にいるか、上にいるか、左にいるか、右にいるか確認するフラグ
 bool isTop2 = TRUE;
 bool isLeft2 = TRUE;
 bool isRight2 = FALSE;
@@ -722,6 +728,7 @@ void Enemy_Draw() {
 	int motion_index2 = bat_motion[bat_index];
 	int motion_index3 = bat2_motion[bat2_index];
 	int motion_index4 = bat2_motion[bat2_index];
+	//ゴースト
 	if (enemyLive){
 	DrawGraph(x_enemy, y_enemy, enemy_act[motion_index + ene_dir * ENE_DIR_SLIDE], TRUE);
 	}
@@ -794,7 +801,7 @@ void Abirity_Draw() {
 		if (canShotBulletFlag == 1) DrawFormatString(30, 100, GetColor(0, 0, 0), "(「鉛弾」発射可能)");
 	}
 }
-
+//当たり判定関数
 int CheckHit(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
 	int L1 = x1;
 	int R1 = x1 + w1;
