@@ -17,7 +17,9 @@ int charaH[12]; //ハンドル
 int canjumpFrag = 1; //ジャンプできるか
 
 //キャラクタ速度関係
+double VY = 0; //キャラクタのy方向の速度
 int v0 = 0; //初速度
+double jumpSpeed = -10.0f;//固定長ジャンプ、ダブルジャンプの初速度
 int time = 0;
 double gravity = 0.5;
 double y_prev = y; //マリオジャンプのときの前回のy座標を格納する変数。１フレーム前のy座標
@@ -39,6 +41,12 @@ int jumpFrames = 0; //ジャンプ中のフレームカウント
 double radPerFrame = 2 * PI / 40;
 int heightJump = 100;
 
+//ダブルジャンプ関係
+double doubleJumpVy = 0.1f; //この値以下のy速度だった場合、ダブルジャンプ可
+int jump_count = 2; //ジャンプの限界段数（２ならダブルジャンプ、３ならトリプルジャンプ）
+int JumpCount = 0; //ジャンプの段数
+
+int yuka = SCREEN_HEIGHT - 50;
 //sin波を利用した重力
 void SinGravity(double* y,int yuka) {
 	
@@ -161,8 +169,33 @@ void MarioJumpGravity(int* inputP, double* y, double* y_p, int yuka) {
 		canjumpFrag = 1;
 	}
 }
+//ダブルジャンプ(2段ジャンプ)
+void DoubleJump(int* inputP,double* y,int yuka) {
+	if (JumpCount == 0) {
+		if (*inputP & PAD_INPUT_1) {
+			JumpCount = 1;
+			VY = jumpSpeed;
 
-int yuka = SCREEN_HEIGHT - 50;
+		}
+	}
+	else {
+		VY += gravity;
+		*y += VY;
+
+		if (*y >= yuka) {
+			*y = yuka;
+			JumpCount = 0;
+		}
+
+		//2段ジャンプ処理
+		if (fabs(VY) < doubleJumpVy && (*inputP & PAD_INPUT_1) && JumpCount < jump_count) {
+			VY = jumpSpeed;
+			JumpCount++;
+		}
+	}
+}
+
+
 //キャラ移動
 void Chara_Move() {
 	int input = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -185,13 +218,23 @@ void Chara_Move() {
 	//MarioGravity(&y, &y_prev,yuka);
 	
 	//ジャンプセット(ジャンプと重力の関数を合わせた関数。面倒な人はこれひとつでジャンプと重力を実装できる)
-	SinJumpGravity(&input, &y, yuka);
+	//SinJumpGravity(&input, &y, yuka);
 	//PhysicsJumpGravity(&input, &v0, &time, &y, yuka); //物理法則ジャンプセット
 	//MarioJumpGravity(&input, &y, &y_prev, yuka); //マリオジャンプセット
 
-
+	//ダブルジャンプ(2段ジャンプ)可ジャンプ
+	DoubleJump(&input,&y,yuka);
 
 	time += 1;
+
+
+
+	if (x > SCREEN_WIDTH) {
+		x = 0;
+	}
+	if (x < 0) {
+		x = SCREEN_WIDTH;
+	}
 }
 //キャラ描画
 void Chara_Draw() {
