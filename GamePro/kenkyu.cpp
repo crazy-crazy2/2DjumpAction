@@ -1,6 +1,8 @@
 #include"DxLib.h"
 #include<math.h>
 #include"teigi.cpp"
+#include<time.h>
+#include<iostream>
 
 #define PI 3.14159265359
 
@@ -17,10 +19,11 @@ int charaH[12]; //ハンドル
 int canjumpFrag = 1; //ジャンプできるか
 
 //キャラクタ速度関係
+double VX = 0; //キャラクタのx方向の速度
 double VY = 0; //キャラクタのy方向の速度
 int v0 = 0; //初速度
 double jumpSpeed = -10.0f;//固定長ジャンプ、ダブルジャンプの初速度
-int time = 0;
+int times = 0;
 double gravity = 0.5;
 double y_prev = y; //マリオジャンプのときの前回のy座標を格納する変数。１フレーム前のy座標
 double F = -1.0f; //マリオジャンプのときに加える力。ジャンプのときは-10,それ以外は-1
@@ -153,6 +156,7 @@ void MarioGravity(double* y,double* y_p,int yuka) {
 }
 //マリオジャンプセット(ジャンプと重力の一体型)
 void MarioJumpGravity(int* inputP, double* y, double* y_p, int yuka) {
+
 	if (*inputP & PAD_INPUT_1) {
 		if (canjumpFrag == 1) {
 			F = -10.0;
@@ -168,6 +172,7 @@ void MarioJumpGravity(int* inputP, double* y, double* y_p, int yuka) {
 		*y = yuka;
 		canjumpFrag = 1;
 	}
+
 }
 //ダブルジャンプ(2段ジャンプ)
 void DoubleJump(int* inputP,double* y,int yuka) {
@@ -194,7 +199,30 @@ void DoubleJump(int* inputP,double* y,int yuka) {
 		}
 	}
 }
+//固定長ジャンプ
+void FixedJump(int* inputP,double* y,int yuka) {
+	//通常状態のとき
+	if (canjumpFrag) {
+		//ジャンプボタンが押されていたらジャンプ状態に移行する
+		if (*inputP & PAD_INPUT_1) {
+			canjumpFrag = FALSE;
+			VY = jumpSpeed;
+		}
+	}
+	else
+	//ジャンプ状態のとき
+	{
+		VY += gravity;
 
+		*y += VY;
+
+		//着地の判定
+		if (*y >= yuka) {
+			*y = yuka;
+			canjumpFrag = TRUE;
+		}
+	}
+}
 
 //キャラ移動
 void Chara_Move() {
@@ -223,12 +251,13 @@ void Chara_Move() {
 	//MarioJumpGravity(&input, &y, &y_prev, yuka); //マリオジャンプセット
 
 	//ダブルジャンプ(2段ジャンプ)可ジャンプ
-	DoubleJump(&input,&y,yuka);
+	//DoubleJump(&input,&y,yuka);
 
-	time += 1;
+	//固定長ジャンプ
+	FixedJump(&input, &y, yuka);
 
-
-
+	times += 1;
+	
 	if (x > SCREEN_WIDTH) {
 		x = 0;
 	}
@@ -249,9 +278,13 @@ void Enemy_Move() {
 	x_enemy -= 2;
 	if (x_enemy < 0) x_enemy = SCREEN_WIDTH;
 }
-
+//エネミー描画
 void Enemy_Draw() {
 	DrawGraph(x_enemy, y_enemy, enemyH[5], TRUE);
+}
+//かかった時間を表示する関数
+void Show_Time() {
+
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {

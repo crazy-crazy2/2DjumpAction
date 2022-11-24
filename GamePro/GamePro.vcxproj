@@ -22,7 +22,7 @@
     <ClInclude Include="Debug\teigi.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="kenkyu.cpp" />
+    <ClCompile Include="Keisoku5.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
